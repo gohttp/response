@@ -1,12 +1,12 @@
 
-# respond
+# response
 
  HTTP response utilities.
 
- View the [docs](http://godoc.org/github.com/gohttp/respond).
+ View the [docs](http://godoc.org/github.com/gohttp/response).
 
  ```go
-respond.Pretty = false
-respond.JSON(res, user)
-respond.XML(res, user)
+response.Pretty = false
+response.JSON(res, user)
+response.XML(res, user)
  ```

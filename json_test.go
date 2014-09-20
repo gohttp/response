@@ -1,4 +1,4 @@
-package respond
+package response
 
 import "github.com/bmizerany/assert"
 import "net/http/httptest"

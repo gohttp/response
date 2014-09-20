@@ -1,4 +1,4 @@
-package respond
+package response
 
 import "encoding/xml"
 import "net/http"
