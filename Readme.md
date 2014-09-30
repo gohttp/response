@@ -7,6 +7,16 @@
 
  ```go
 response.Pretty = false
-response.JSON(res, user)
-response.XML(res, user)
+response.JSON(w, user)
+response.XML(w, user)
+response.NotFound(w)
+response.Unauthorized(w)
  ```
+
+## Provides
+
+ - JSON responses
+ - XML responses
+ - Error responses
+ - Status code responses
+ - Toggling of "pretty" responses
