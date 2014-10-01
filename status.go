@@ -3,300 +3,229 @@ package response
 import "net/http"
 import "fmt"
 
-// message returns the message string given to
-// one of the status functions or falls back on
-// default status text.
-func message(msg []string, code int) string {
-	if len(msg) > 0 {
-		return msg[0]
-	} else {
-		return http.StatusText(code)
+// respond with the given message.
+func text(w http.ResponseWriter, code int, msg string) {
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.WriteHeader(code)
+	fmt.Fprintln(w, msg)
+}
+
+// write `msg` to the response writer, currently only a single argument is supported.
+func write(w http.ResponseWriter, code int, msg []interface{}) {
+	if len(msg) == 0 {
+		text(w, code, http.StatusText(code))
+		return
+	}
+
+	switch msg[0].(type) {
+	case string:
+		text(w, code, msg[0].(string))
+	default:
+		JSON(w, msg[0], code)
 	}
 }
 
 // Continue response.
-func Continue(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusContinue)
-	fmt.Fprintln(w, message(msg, http.StatusContinue))
+func Continue(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusContinue, msg)
 }
 
 // SwitchingProtocols response.
-func SwitchingProtocols(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusSwitchingProtocols)
-	fmt.Fprintln(w, message(msg, http.StatusSwitchingProtocols))
+func SwitchingProtocols(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusSwitchingProtocols, msg)
 }
 
 // OK response.
-func OK(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, message(msg, http.StatusOK))
+func OK(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusOK, msg)
 }
 
 // Created response.
-func Created(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusCreated)
-	fmt.Fprintln(w, message(msg, http.StatusCreated))
+func Created(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusCreated, msg)
 }
 
 // Accepted response.
-func Accepted(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusAccepted)
-	fmt.Fprintln(w, message(msg, http.StatusAccepted))
+func Accepted(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusAccepted, msg)
 }
 
 // NonAuthoritativeInfo response.
-func NonAuthoritativeInfo(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusNonAuthoritativeInfo)
-	fmt.Fprintln(w, message(msg, http.StatusNonAuthoritativeInfo))
+func NonAuthoritativeInfo(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusNonAuthoritativeInfo, msg)
 }
 
 // NoContent response.
-func NoContent(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusNoContent)
-	fmt.Fprintln(w, message(msg, http.StatusNoContent))
+func NoContent(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusNoContent, msg)
 }
 
 // ResetContent response.
-func ResetContent(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusResetContent)
-	fmt.Fprintln(w, message(msg, http.StatusResetContent))
+func ResetContent(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusResetContent, msg)
 }
 
 // PartialContent response.
-func PartialContent(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusPartialContent)
-	fmt.Fprintln(w, message(msg, http.StatusPartialContent))
+func PartialContent(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusPartialContent, msg)
 }
 
 // MultipleChoices response.
-func MultipleChoices(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusMultipleChoices)
-	fmt.Fprintln(w, message(msg, http.StatusMultipleChoices))
+func MultipleChoices(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusMultipleChoices, msg)
 }
 
 // MovedPermanently response.
-func MovedPermanently(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusMovedPermanently)
-	fmt.Fprintln(w, message(msg, http.StatusMovedPermanently))
+func MovedPermanently(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusMovedPermanently, msg)
 }
 
 // Found response.
-func Found(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusFound)
-	fmt.Fprintln(w, message(msg, http.StatusFound))
+func Found(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusFound, msg)
 }
 
 // SeeOther response.
-func SeeOther(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusSeeOther)
-	fmt.Fprintln(w, message(msg, http.StatusSeeOther))
+func SeeOther(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusSeeOther, msg)
 }
 
 // NotModified response.
-func NotModified(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusNotModified)
-	fmt.Fprintln(w, message(msg, http.StatusNotModified))
+func NotModified(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusNotModified, msg)
 }
 
 // UseProxy response.
-func UseProxy(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusUseProxy)
-	fmt.Fprintln(w, message(msg, http.StatusUseProxy))
+func UseProxy(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusUseProxy, msg)
 }
 
 // TemporaryRedirect response.
-func TemporaryRedirect(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusTemporaryRedirect)
-	fmt.Fprintln(w, message(msg, http.StatusTemporaryRedirect))
+func TemporaryRedirect(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusTemporaryRedirect, msg)
 }
 
 // BadRequest response.
-func BadRequest(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusBadRequest)
-	fmt.Fprintln(w, message(msg, http.StatusBadRequest))
+func BadRequest(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusBadRequest, msg)
 }
 
 // Unauthorized response.
-func Unauthorized(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusUnauthorized)
-	fmt.Fprintln(w, message(msg, http.StatusUnauthorized))
+func Unauthorized(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusUnauthorized, msg)
 }
 
 // PaymentRequired response.
-func PaymentRequired(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusPaymentRequired)
-	fmt.Fprintln(w, message(msg, http.StatusPaymentRequired))
+func PaymentRequired(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusPaymentRequired, msg)
 }
 
 // Forbidden response.
-func Forbidden(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusForbidden)
-	fmt.Fprintln(w, message(msg, http.StatusForbidden))
+func Forbidden(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusForbidden, msg)
 }
 
 // NotFound response.
-func NotFound(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusNotFound)
-	fmt.Fprintln(w, message(msg, http.StatusNotFound))
+func NotFound(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusNotFound, msg)
 }
 
 // MethodNotAllowed response.
-func MethodNotAllowed(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusMethodNotAllowed)
-	fmt.Fprintln(w, message(msg, http.StatusMethodNotAllowed))
+func MethodNotAllowed(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusMethodNotAllowed, msg)
 }
 
 // NotAcceptable response.
-func NotAcceptable(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusNotAcceptable)
-	fmt.Fprintln(w, message(msg, http.StatusNotAcceptable))
+func NotAcceptable(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusNotAcceptable, msg)
 }
 
 // ProxyAuthRequired response.
-func ProxyAuthRequired(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusProxyAuthRequired)
-	fmt.Fprintln(w, message(msg, http.StatusProxyAuthRequired))
+func ProxyAuthRequired(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusProxyAuthRequired, msg)
 }
 
 // RequestTimeout response.
-func RequestTimeout(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusRequestTimeout)
-	fmt.Fprintln(w, message(msg, http.StatusRequestTimeout))
+func RequestTimeout(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusRequestTimeout, msg)
 }
 
 // Conflict response.
-func Conflict(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusConflict)
-	fmt.Fprintln(w, message(msg, http.StatusConflict))
+func Conflict(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusConflict, msg)
 }
 
 // Gone response.
-func Gone(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusGone)
-	fmt.Fprintln(w, message(msg, http.StatusGone))
+func Gone(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusGone, msg)
 }
 
 // LengthRequired response.
-func LengthRequired(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusLengthRequired)
-	fmt.Fprintln(w, message(msg, http.StatusLengthRequired))
+func LengthRequired(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusLengthRequired, msg)
 }
 
 // PreconditionFailed response.
-func PreconditionFailed(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusPreconditionFailed)
-	fmt.Fprintln(w, message(msg, http.StatusPreconditionFailed))
+func PreconditionFailed(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusPreconditionFailed, msg)
 }
 
 // RequestEntityTooLarge response.
-func RequestEntityTooLarge(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusRequestEntityTooLarge)
-	fmt.Fprintln(w, message(msg, http.StatusRequestEntityTooLarge))
+func RequestEntityTooLarge(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusRequestEntityTooLarge, msg)
 }
 
 // RequestURITooLong response.
-func RequestURITooLong(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusRequestURITooLong)
-	fmt.Fprintln(w, message(msg, http.StatusRequestURITooLong))
+func RequestURITooLong(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusRequestURITooLong, msg)
 }
 
 // UnsupportedMediaType response.
-func UnsupportedMediaType(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusUnsupportedMediaType)
-	fmt.Fprintln(w, message(msg, http.StatusUnsupportedMediaType))
+func UnsupportedMediaType(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusUnsupportedMediaType, msg)
 }
 
 // RequestedRangeNotSatisfiable response.
-func RequestedRangeNotSatisfiable(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusRequestedRangeNotSatisfiable)
-	fmt.Fprintln(w, message(msg, http.StatusRequestedRangeNotSatisfiable))
+func RequestedRangeNotSatisfiable(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusRequestedRangeNotSatisfiable, msg)
 }
 
 // ExpectationFailed response.
-func ExpectationFailed(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusExpectationFailed)
-	fmt.Fprintln(w, message(msg, http.StatusExpectationFailed))
+func ExpectationFailed(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusExpectationFailed, msg)
 }
 
 // Teapot response.
-func Teapot(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusTeapot)
-	fmt.Fprintln(w, message(msg, http.StatusTeapot))
+func Teapot(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusTeapot, msg)
 }
 
 // InternalServerError response.
-func InternalServerError(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusInternalServerError)
-	fmt.Fprintln(w, message(msg, http.StatusInternalServerError))
+func InternalServerError(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusInternalServerError, msg)
 }
 
 // NotImplemented response.
-func NotImplemented(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusNotImplemented)
-	fmt.Fprintln(w, message(msg, http.StatusNotImplemented))
+func NotImplemented(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusNotImplemented, msg)
 }
 
 // BadGateway response.
-func BadGateway(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusBadGateway)
-	fmt.Fprintln(w, message(msg, http.StatusBadGateway))
+func BadGateway(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusBadGateway, msg)
 }
 
 // ServiceUnavailable response.
-func ServiceUnavailable(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusServiceUnavailable)
-	fmt.Fprintln(w, message(msg, http.StatusServiceUnavailable))
+func ServiceUnavailable(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusServiceUnavailable, msg)
 }
 
 // GatewayTimeout response.
-func GatewayTimeout(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusGatewayTimeout)
-	fmt.Fprintln(w, message(msg, http.StatusGatewayTimeout))
+func GatewayTimeout(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusGatewayTimeout, msg)
 }
 
 // HTTPVersionNotSupported response.
-func HTTPVersionNotSupported(w http.ResponseWriter, msg ...string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusHTTPVersionNotSupported)
-	fmt.Fprintln(w, message(msg, http.StatusHTTPVersionNotSupported))
+func HTTPVersionNotSupported(w http.ResponseWriter, msg ...interface{}) {
+	write(w, http.StatusHTTPVersionNotSupported, msg)
 }

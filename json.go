@@ -3,8 +3,8 @@ package response
 import "encoding/json"
 import "net/http"
 
-// JSON response.
-func JSON(res http.ResponseWriter, val interface{}) {
+// JSON response with optional status code.
+func JSON(w http.ResponseWriter, val interface{}, code ...int) {
 	var b []byte
 	var err error
 
@@ -15,10 +15,15 @@ func JSON(res http.ResponseWriter, val interface{}) {
 	}
 
 	if err != nil {
-		http.Error(res, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	res.Header().Set("Content-Type", "application/json")
-	res.Write(b)
+	w.Header().Set("Content-Type", "application/json")
+
+	if len(code) > 0 {
+		w.WriteHeader(code[0])
+	}
+
+	w.Write(b)
 }

@@ -3,8 +3,8 @@ package response
 import "encoding/xml"
 import "net/http"
 
-// XML response.
-func XML(res http.ResponseWriter, val interface{}) {
+// XML response with optional status code.
+func XML(w http.ResponseWriter, val interface{}, code ...int) {
 	var b []byte
 	var err error
 
@@ -15,10 +15,15 @@ func XML(res http.ResponseWriter, val interface{}) {
 	}
 
 	if err != nil {
-		http.Error(res, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	res.Header().Set("Content-Type", "application/xml")
-	res.Write(b)
+	w.Header().Set("Content-Type", "application/xml")
+
+	if len(code) > 0 {
+		w.WriteHeader(code[0])
+	}
+
+	w.Write(b)
 }
