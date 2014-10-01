@@ -11,6 +11,8 @@ response.JSON(w, user)
 response.XML(w, user)
 response.NotFound(w)
 response.Unauthorized(w)
+response.Unauthorized(w, "sorry!")
+response.Unauthorized(w, map[string]string{"whatever": "here"})
  ```
 
 ## Provides
