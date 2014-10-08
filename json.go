@@ -1,7 +1,9 @@
 package response
 
-import "encoding/json"
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
 // JSON response with optional status code.
 func JSON(w http.ResponseWriter, val interface{}, code ...int) {
@@ -19,7 +21,7 @@ func JSON(w http.ResponseWriter, val interface{}, code ...int) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set(ContentType, ContentJSON)
 
 	if len(code) > 0 {
 		w.WriteHeader(code[0])

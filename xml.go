@@ -1,7 +1,9 @@
 package response
 
-import "encoding/xml"
-import "net/http"
+import (
+	"encoding/xml"
+	"net/http"
+)
 
 // XML response with optional status code.
 func XML(w http.ResponseWriter, val interface{}, code ...int) {
@@ -19,7 +21,7 @@ func XML(w http.ResponseWriter, val interface{}, code ...int) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/xml")
+	w.Header().Set(ContentType, ContentXML)
 
 	if len(code) > 0 {
 		w.WriteHeader(code[0])
