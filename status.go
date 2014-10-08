@@ -1,11 +1,20 @@
 package response
 
-import "net/http"
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
+
+const (
+	ContentType = "Content-Type"
+	ContentJSON = "application/json"
+	ContentXML  = "text/xml"
+	ContentText = "text/plain; charset=utf-8"
+)
 
 // respond with the given message.
 func text(w http.ResponseWriter, code int, msg string) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Header().Set(ContentType, ContentText)
 	w.WriteHeader(code)
 	fmt.Fprintln(w, msg)
 }
